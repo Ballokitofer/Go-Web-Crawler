@@ -6,20 +6,31 @@ import (
 )
 
 func main(){
-	resp, err := http.Get("https://example.com")
-	if err != nil {
-		fmt.Println("Error :",err)
-		return
+	urls := []string{
+		"https://example.com",
+		"https://google.com",
+		"https://github.com",
+		"https://httpbin.org/status/404",
 	}
-	
-	defer resp.Body.Close()
-	successCode := 0
-
-	if resp.StatusCode == 200 {
-			successCode++
+	sucessCode :=0
+	for i:=0;i<len(urls);i++{
+		if checkURL(urls[i]){
+			sucessCode++
 		}
-		
-	fmt.Println("Status Code : ",resp.StatusCode)	
-	fmt.Println("Sucessful requests : ",successCode)
+	}	
+	fmt.Println("Sucessful Code :",sucessCode)
 	fmt.Println("Finish Checking URL")
+}
+
+func checkURL(url string)bool{
+	resp,err := http.Get(url)
+		if err != nil {
+			fmt.Println("Error :",err)
+			return false
+		}	
+
+		fmt.Println("URL : ",url)
+		fmt.Println("Status Code : ",resp.StatusCode)	
+		resp.Body.Close()
+		return resp.StatusCode == 200
 }
