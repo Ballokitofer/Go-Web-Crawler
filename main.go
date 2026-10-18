@@ -52,11 +52,13 @@ func checkURL(url string)bool{
         		fmt.Println("URL Error:", err)
         		continue
     		}
-
+			if !isHTTPURL(fullURL) {
+    			continue
+			}	
     		fmt.Println(fullURL)
 		}
 
-			fmt.Println("HTML Length :",len(body))
+		fmt.Println("HTML Length :",len(body))
 		fmt.Println("URL : ",url)
 		fmt.Println("Status Code : ",resp.StatusCode)	
 		return resp.StatusCode == 200
@@ -106,3 +108,12 @@ func resolveURL(base string, href string) (string, error) {
     return baseURL.ResolveReference(hrefURL).String(), nil
 }
 
+func isHTTPURL(rawURL string) bool {
+    parsedURL, err := url.Parse(rawURL)
+    if err != nil {
+        return false
+    }
+
+    return parsedURL.Scheme == "http" ||
+        parsedURL.Scheme == "https"
+}
