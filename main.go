@@ -46,6 +46,7 @@ func checkURL(url string)bool{
 		links := extractLinks(body)
 
 		fmt.Println("Links found:", len(links))
+		seenLinks := make(map[string]bool)
 		for _, link := range links {
     		fullURL, err := resolveURL(url, link)
    			if err != nil {
@@ -54,7 +55,11 @@ func checkURL(url string)bool{
     		}
 			if !isHTTPURL(fullURL) {
     			continue
-			}	
+			}
+			if seenLinks[fullURL] {
+    			continue
+			}
+			seenLinks[fullURL] = true	
     		fmt.Println(fullURL)
 		}
 
